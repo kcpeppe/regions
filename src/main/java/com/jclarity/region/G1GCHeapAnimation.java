@@ -46,32 +46,6 @@ public class G1GCHeapAnimation extends Application {
         primaryStage.show();
     }
 
-//    private ToolBar getToolBar() {
-//        ToolBar toolBar = new ToolBar();
-//        toolBar.getItems().addAll(
-//                new Separator(),
-////                btnNew,
-////                btnPause,
-////                btnQuit,
-//                new Separator(),
-////                chkSound,
-////                chkMusic,
-//                new Separator()
-//        );
-//        return toolBar;
-//    }
-
-//    private HBox addToolBar() {
-//        HBox toolBar = new HBox();
-//        toolBar.setPadding(new Insets(20));
-//        toolBar.setAlignment(Pos.CENTER);
-//        toolBar.alignmentProperty().isBound();
-//        toolBar.setSpacing(5);
-//        toolBar.setStyle("-fx-background-color: Black");
-//
-//        return toolBar;
-//    }
-
     public static void main(String[] args) {
 
         launch(args);

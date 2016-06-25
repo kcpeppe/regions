@@ -41,9 +41,6 @@ public class G1GCHeapView extends Region implements Observer {
         return grid;
     }
 
-    private void colorGridPane() {
-    }
-
     private void calculateGridSize( int numberOfRectangles) {
         int limit = (int)Math.sqrt( (double)numberOfRectangles);
         int value = numberOfRectangles;
@@ -60,6 +57,15 @@ public class G1GCHeapView extends Region implements Observer {
         }
     }
 
+    @Override
+    public void update(Observable o, Object arg) {
+        double index = (Double)arg;
+        final G1GCHeap heap = jvm.getG1GCHeapAt((int)index);
+        Iterator<G1GCRegion> regionIterator = heap.iterator();
+        GridPane grid = (GridPane) getChildren().get(0);
+        grid.getChildren().forEach(node -> ((Rectangle) node).setFill(colors.get(regionIterator.next().getAssignment())));
+    }
+
     private HashMap<RegionType,Color> colors;
 
     {
@@ -70,14 +76,5 @@ public class G1GCHeapView extends Region implements Observer {
         colors.put( RegionType.OLD, Color.BLUE);
         colors.put( RegionType.HUMS, Color.CORAL);
         colors.put( RegionType.HUMC, Color.RED);
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
-        double index = (Double)arg;
-        final G1GCHeap heap = jvm.getG1GCHeapAt((int)index);
-        Iterator<G1GCRegion> regionIterator = heap.iterator();
-        GridPane grid = (GridPane) getChildren().get(0);
-        grid.getChildren().forEach(node -> ((Rectangle) node).setFill(colors.get(regionIterator.next().getAssignment())));
     }
 }
