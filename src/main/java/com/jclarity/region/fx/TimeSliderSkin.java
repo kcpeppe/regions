@@ -9,7 +9,6 @@ public class TimeSliderSkin extends SkinBase<TimeSlider> {
 
     final private Slider slider;
     final private ProgressBar progressBar;
-    private double frameCount = 1.0;
 
     protected TimeSliderSkin(TimeSlider control) {
         super(control);
@@ -25,10 +24,6 @@ public class TimeSliderSkin extends SkinBase<TimeSlider> {
         slider.valueProperty().addListener((observable, oldValue, newValue) -> progressBar.setProgress(newValue.doubleValue() / control.getMax()));
 
         getChildren().addAll(progressBar,slider);
-    }
-
-    public void setFrameCount( int frameCount) {
-        this.frameCount = (double) frameCount;
     }
 
     @Override protected double computeMinWidth(double height, double topInset, double rightInset, double bottomInset, double leftInset) {
@@ -62,9 +57,5 @@ public class TimeSliderSkin extends SkinBase<TimeSlider> {
     @Override protected void layoutChildren( double x, double y, double w, double h) {
         slider.resizeRelocate(x,y,w,h);
         progressBar.resizeRelocate(x,y,w,h);
-    }
-
-    void moveTo(double value) {
-        progressBar.setProgress(value);
     }
 }
