@@ -48,7 +48,12 @@ public class VideoControls extends HBox {
         });
 
 
-        Image image = new Image(getClass().getResourceAsStream("step_to_beginning.png"));
+        Image image;
+        try {
+        image = new Image(getClass().getResourceAsStream("step_to_beginning.png"));
+        } catch (Throwable t) {
+            System.out.println(t);
+        }
         //ToggleButton skipToBeginning = new ToggleButton("|<", new ImageView(image));  //rewind
         ToggleButton skipToBeginning = new ToggleButton("|<");  //rewind
         skipToBeginning.setOnAction(event -> {
@@ -56,7 +61,6 @@ public class VideoControls extends HBox {
             frameCounter.set(0);
             System.out.println(event.toString() + ", counter: " + frameCounter.getFrameIndex());
         });
-
 
         image = new Image(getClass().getResourceAsStream("step_backwards.png"));
         //ToggleButton rewind = new ToggleButton("", new ImageView(image));

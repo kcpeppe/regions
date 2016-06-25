@@ -22,7 +22,7 @@ public class TimeSliderSkin extends SkinBase<TimeSlider> {
         progressBar.setMinWidth(control.getMinWidth());
         progressBar.setMaxWidth(control.getMaxWidth());
 
-        slider.valueProperty().addListener((observable, oldValue, newValue) -> progressBar.setProgress(newValue.doubleValue() / frameCount));
+        slider.valueProperty().addListener((observable, oldValue, newValue) -> progressBar.setProgress(newValue.doubleValue() / control.getMax()));
 
         getChildren().addAll(progressBar,slider);
     }

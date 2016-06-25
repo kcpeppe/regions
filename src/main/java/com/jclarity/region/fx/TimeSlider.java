@@ -26,7 +26,10 @@ public class TimeSlider extends Control {
     public void setFrameCounter(FrameCounter frameCounter) {
         slider.valueProperty().bindBidirectional(frameCounter);
         slider.setMax( frameCounter.getFrameCount());
-        ((TimeSliderSkin)getSkin()).setFrameCount(frameCounter.getFrameCount());
+    }
+
+    public int getMax() {
+        return (int)slider.getMax();
     }
 
     protected ProgressBar getProgressBar() {
