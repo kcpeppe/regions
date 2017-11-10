@@ -3,7 +3,9 @@
 export FLAGS="-Xloggc:gc.log -XX:+PrintGCDetails -XX:+PrintGCApplicationStoppedTime -XX:+PrintTenuringDistribution -XX:+PrintGCApplicationConcurrentTime -XX:+PrintReferenceGC -XX:+PrintGCDateStamps -Xmx4G -XX:+UseG1GC"
 export PROFILE="-XX:+UnlockCommericalFeatures -XX:+FlightRecorder"
 export MAIN=com.jclarity.region.G1GCHeapAnimation
-export CLASS_PATH=out/production/regions
+#export CLASS_PATH=out/production/regions
+export CLASS_PATH=build/classes/main
+
 
 export ARGS=testdata.log
 

@@ -5,6 +5,7 @@ package com.jclarity.region.model;
 public class G1GCRegion {
 
     private RegionType assignment;
+    private long regionSize;
     private long startAddress;
     private long endAddress;
     private int bytesUsed;
@@ -16,6 +17,7 @@ public class G1GCRegion {
 
     //###   type address-range used prev-live next-live gc-eff remset code-roots
     public G1GCRegion(RegionType assignment, long startAddress, long endAddress, int bytesUsed, int previousLive, int nextLive, double gcEffeciency, int rememberedSetSize, int codeRootsSize) {
+        this.regionSize = endAddress - startAddress;
         this.assignment = assignment;
         this.startAddress = startAddress;
         this.endAddress = endAddress;
@@ -28,6 +30,7 @@ public class G1GCRegion {
     }
 
     public RegionType getAssignment() { return assignment; }
+    public long getRegionSize() { return this.regionSize; }
     public long getStartAddress() { return startAddress; }
     public long getEndAddress() { return endAddress; }
     public int getBytesUsed() { return bytesUsed; }
@@ -61,5 +64,6 @@ public class G1GCRegion {
     public int hashCode() {
         return (int)getStartAddress();
     }
+
 }
 

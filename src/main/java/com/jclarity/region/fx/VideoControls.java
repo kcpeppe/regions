@@ -1,14 +1,17 @@
 package com.jclarity.region.fx;
 
 
-import com.jclarity.region.FrameCounter;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import javax.swing.*;
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -20,8 +23,10 @@ public class VideoControls extends HBox {
     private Button playPause;
     private FrameCounter frameCounter;
     final TimeSlider slider;
+    final private Stage stage;
 
-    public VideoControls() {
+    public VideoControls(Stage stage) {
+        this.stage = stage;
         getStyleClass().add("video-controls");
         slider = new TimeSlider();
         setButtons();
@@ -37,22 +42,23 @@ public class VideoControls extends HBox {
         ToggleButton openFileDialog = new ToggleButton("open");
 
         openFileDialog.setOnAction(event -> {
-            pause();
-            System.out.println("open file" + event.toString());
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open Log File");
+            File file = fileChooser.showOpenDialog(stage);
+//            openFile(file);
         });
 
 
         Image image;
         image = new Image(getClass().getResourceAsStream("step_to_beginning.png"));
-        ToggleButton skipToBeginning = new ToggleButton("|<");  //rewind
+        Button skipToBeginning = new Button("|<");  //rewind
         skipToBeginning.setOnAction(event -> {
             pause();
-            frameCounter.set(0);
-            System.out.println(event.toString() + ", counter: " + frameCounter.getFrameIndex());
+            frameCounter.reset();
         });
 
         image = new Image(getClass().getResourceAsStream("step_backwards.png"));
-        ToggleButton rewind = new ToggleButton("<<");
+        Button rewind = new Button("<<");
         rewind.setOnAction(event -> {
             pause();
             timer.cancel();
@@ -86,16 +92,15 @@ public class VideoControls extends HBox {
 
 
         image = new Image(getClass().getResourceAsStream("step_forward.png"));
-        ToggleButton fastForward = new ToggleButton(">>"); //
+        Button fastForward = new Button(">>"); //
         fastForward.setOnAction(event -> {
             pause();
             frameCounter.stepForward();
-            System.out.println(event.toString() + ", counter: " + frameCounter.getFrameIndex());
         });
 
 
         image = new Image(getClass().getResourceAsStream("step_to_end.png"));
-        ToggleButton skipToEnd = new ToggleButton(">|"); //end
+        Button skipToEnd = new Button(">|"); //end
         skipToEnd.setOnAction(event -> {
             pause();
             frameCounter.stepToEnd();

@@ -30,7 +30,9 @@ public class JavaVirtualMachine implements Iterable<G1GCHeap> {
         }
     }
 
-    public int getNumberOfViews() { return viewsOverTime.size(); }
+    public int getNumberOfViews() {
+        return viewsOverTime.size();
+    }
 
     public G1GCHeap getG1GCHeapAt(int index) {
         return viewsOverTime.get(index);

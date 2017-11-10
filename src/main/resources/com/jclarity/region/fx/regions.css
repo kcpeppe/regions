@@ -1,0 +1,28 @@
+.g1-region {
+    -fx-border-color: lightgreen;
+    -fx-border-width: 0.1px;
+}
+
+.g1-region.free {
+    -fx-background-color: black, black;
+}
+.g1-region.eden {
+    -fx-background-color: green;
+}
+.g1-region.surv {
+    -fx-background-color: yellow;
+}
+.g1-region.old {
+    -fx-background-color: blue, lightblue;
+}
+.g1-region.hums {
+    -fx-background-color: coral;
+}
+.g1-region.humc {
+    -fx-background-color: red;
+}
+
+.tooltip {
+    -fx-background-color: lightyellow;
+    -fx-text-fill: black;
+}

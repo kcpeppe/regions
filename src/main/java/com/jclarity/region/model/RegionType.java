@@ -1,6 +1,8 @@
 package com.jclarity.region.model;
 
 
+import java.util.Locale;
+
 public enum RegionType {
     FREE("FREE"),
     EDEN("EDEN"),
@@ -16,4 +18,8 @@ public enum RegionType {
     }
 
     public String getLabel() { return label; }
+
+    public String toStyleClass() {
+        return getLabel().toLowerCase(Locale.ROOT);
+    }
 }

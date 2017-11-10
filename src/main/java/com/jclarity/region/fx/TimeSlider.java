@@ -1,6 +1,5 @@
 package com.jclarity.region.fx;
 
-import com.jclarity.region.FrameCounter;
 import javafx.scene.control.Control;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Skin;
@@ -24,7 +23,7 @@ public class TimeSlider extends Control {
     }
 
     public void setFrameCounter(FrameCounter frameCounter) {
-        slider.valueProperty().bindBidirectional(frameCounter);
+        slider.valueProperty().bindBidirectional(frameCounter.framePointerProperty());
         slider.setMax( frameCounter.getFrameCount());
     }
 

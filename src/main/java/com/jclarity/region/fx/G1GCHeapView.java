@@ -1,5 +1,10 @@
-package com.jclarity.region.model;
+package com.jclarity.region.fx;
 
+import com.jclarity.region.model.G1GCHeap;
+import com.jclarity.region.model.G1GCRegion;
+import com.jclarity.region.model.JavaVirtualMachine;
+import com.jclarity.region.model.RegionType;
+import javafx.application.Platform;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
@@ -9,6 +14,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Random;
 
 public class G1GCHeapView extends Region implements Observer {
 
@@ -27,10 +33,7 @@ public class G1GCHeapView extends Region implements Observer {
         calculateGridSize(heap.size());
         GridPane grid = new GridPane();
         heap.forEach(region -> {
-            Rectangle rec = new Rectangle();
-            rec.setWidth(10);
-            rec.setHeight(10);
-            rec.setFill(colors.get(region.getAssignment()));
+            G1Region rec = new G1Region();
             GridPane.setRowIndex(rec,row);
             GridPane.setColumnIndex(rec,col);
             grid.getChildren().add(rec);
@@ -57,24 +60,18 @@ public class G1GCHeapView extends Region implements Observer {
         }
     }
 
+    Random random = new Random(9);
     @Override
     public void update(Observable o, Object arg) {
         double index = (Double)arg;
         final G1GCHeap heap = jvm.getG1GCHeapAt((int)index);
         Iterator<G1GCRegion> regionIterator = heap.iterator();
         GridPane grid = (GridPane) getChildren().get(0);
-        grid.getChildren().forEach(node -> ((Rectangle) node).setFill(colors.get(regionIterator.next().getAssignment())));
-    }
 
-    private HashMap<RegionType,Color> colors;
-
-    {
-        colors = new HashMap<>();
-        colors.put( RegionType.FREE, Color.BLACK);
-        colors.put( RegionType.EDEN, Color.GREEN);
-        colors.put( RegionType.SURV, Color.YELLOW);
-        colors.put( RegionType.OLD, Color.BLUE);
-        colors.put( RegionType.HUMS, Color.CORAL);
-        colors.put( RegionType.HUMC, Color.RED);
+        Platform.runLater(() ->
+            grid.getChildren().forEach(node -> {
+                G1GCRegion activeRegion = regionIterator.next();
+                ((G1Region) node).update(activeRegion.getAssignment(), (double) activeRegion.getNextLive() / (double)activeRegion.getRegionSize());
+        }));
     }
 }

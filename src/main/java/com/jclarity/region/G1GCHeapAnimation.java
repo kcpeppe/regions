@@ -1,8 +1,9 @@
 package com.jclarity.region;
 
 
+import com.jclarity.region.fx.FrameCounter;
 import com.jclarity.region.fx.VideoControls;
-import com.jclarity.region.model.G1GCHeapView;
+import com.jclarity.region.fx.G1GCHeapView;
 import com.jclarity.region.model.JavaVirtualMachine;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -29,11 +30,11 @@ public class G1GCHeapAnimation extends Application {
         initDataSource(parameters);
 
         final VBox box = new VBox();
-        VideoControls controls = new VideoControls();
+        VideoControls controls = new VideoControls(primaryStage);
         G1GCHeapView view = new G1GCHeapView(jvm);
         FrameCounter frameCounter = new FrameCounter(jvm.getNumberOfViews());
         controls.setFrameCounter(frameCounter);
-        frameCounter.addListener((observable, oldValue, newValue) -> view.update(null,newValue));
+        frameCounter.addListener(frameIndex -> view.update(null,frameIndex));
         box.getChildren().addAll(view,controls);
 
         Scene scene = new Scene(box);
