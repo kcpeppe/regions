@@ -62,4 +62,6 @@ public class FrameCounter {
                 (observable, oldValue, newValue) -> consumer.accept(newValue.doubleValue())
         );
     }
+
+
 }

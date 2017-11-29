@@ -21,6 +21,7 @@ public class VideoControls extends HBox {
     private boolean playing = false;
     private Timer timer = null;
     private Button playPause;
+    private Button stop;
     private FrameCounter frameCounter;
     final TimeSlider slider;
     final private Stage stage;
@@ -39,23 +40,18 @@ public class VideoControls extends HBox {
 
     private void setButtons() {
 
-        ToggleButton openFileDialog = new ToggleButton("open");
+//        ToggleButton openFileDialog = new ToggleButton("open");
+//
+//        openFileDialog.setOnAction(event -> {
+//            FileChooser fileChooser = new FileChooser();
+//            fileChooser.setTitle("Open Log File");
+//            File file = fileChooser.showOpenDialog(stage);
+////            openFile(file);
+//        });
 
-        openFileDialog.setOnAction(event -> {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Open Log File");
-            File file = fileChooser.showOpenDialog(stage);
-//            openFile(file);
-        });
 
+        Image image ;
 
-        Image image;
-        image = new Image(getClass().getResourceAsStream("step_to_beginning.png"));
-        Button skipToBeginning = new Button("|<");  //rewind
-        skipToBeginning.setOnAction(event -> {
-            pause();
-            frameCounter.reset();
-        });
 
         image = new Image(getClass().getResourceAsStream("step_backwards.png"));
         Button rewind = new Button("<<");
@@ -63,6 +59,13 @@ public class VideoControls extends HBox {
             pause();
             timer.cancel();
             frameCounter.stepBackwards();
+        });
+
+        image = new Image(getClass().getResource("step_to_beginning.png").toExternalForm());
+        Button skipToBeginning = new Button("|<");  //rewind
+        skipToBeginning.setOnAction(event -> {
+            pause();
+            frameCounter.reset();
         });
 
 
@@ -89,7 +92,10 @@ public class VideoControls extends HBox {
             } else
                 pause();
         });
-
+        stop = new Button("x");
+        stop.setOnAction(event -> {
+           stop();
+        });
 
         image = new Image(getClass().getResourceAsStream("step_forward.png"));
         Button fastForward = new Button(">>"); //
@@ -105,7 +111,8 @@ public class VideoControls extends HBox {
             pause();
             frameCounter.stepToEnd();
         });
-        getChildren().addAll(openFileDialog, skipToBeginning, rewind, playPause, slider, fastForward, skipToEnd);
+        //getChildren().addAll(openFileDialog, skipToBeginning, rewind, playPause, slider, fastForward, skipToEnd);
+        getChildren().addAll(stop,skipToBeginning, rewind, playPause, slider, fastForward, skipToEnd);
     }
 
     private void pause() {
@@ -114,5 +121,14 @@ public class VideoControls extends HBox {
             timer.cancel();
             playing = false;
         }
+    }
+
+    private void stop() {
+        if ( playing) {
+            playPause.setText(">");
+            timer.cancel();
+            playing = false;
+        }
+        setVisible(false);
     }
 }

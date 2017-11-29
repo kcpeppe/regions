@@ -3,14 +3,10 @@ package com.jclarity.region.fx;
 import com.jclarity.region.model.G1GCHeap;
 import com.jclarity.region.model.G1GCRegion;
 import com.jclarity.region.model.JavaVirtualMachine;
-import com.jclarity.region.model.RegionType;
 import javafx.application.Platform;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
