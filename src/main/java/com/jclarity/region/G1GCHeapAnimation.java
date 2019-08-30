@@ -5,10 +5,11 @@ import com.jclarity.region.fx.FrameCounter;
 import com.jclarity.region.fx.VideoControls;
 import com.jclarity.region.fx.G1GCHeapView;
 import com.jclarity.region.model.JavaVirtualMachine;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -42,8 +43,8 @@ public class G1GCHeapAnimation extends Application {
         jvm.load();
         G1GCHeapView view = new G1GCHeapView(jvm);
         FrameCounter frameCounter = new FrameCounter(jvm.getNumberOfViews() - 1);
+        frameCounter.framePointerProperty().addListener(view);
         controls.setFrameCounter(frameCounter);
-        frameCounter.addListener(frameIndex -> view.update(null, frameIndex));
         //box.getChildren().addAll(view,controls);
 
         box.getChildren().add(view);

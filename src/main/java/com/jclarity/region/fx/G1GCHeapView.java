@@ -4,15 +4,15 @@ import com.jclarity.region.model.G1GCHeap;
 import com.jclarity.region.model.G1GCRegion;
 import com.jclarity.region.model.JavaVirtualMachine;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 
 import java.util.Iterator;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Random;
 
-public class G1GCHeapView extends Region implements Observer {
+public class G1GCHeapView extends Region implements ChangeListener<Number> {
 
     private int row = 0, col = 0;
     private int colNum;
@@ -57,9 +57,10 @@ public class G1GCHeapView extends Region implements Observer {
     }
 
     Random random = new Random(9);
+
     @Override
-    public void update(Observable o, Object arg) {
-        double index = (Double)arg;
+    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+        double index = (Double)newValue;
         final G1GCHeap heap = jvm.getG1GCHeapAt((int)index);
         Iterator<G1GCRegion> regionIterator = heap.iterator();
         GridPane grid = (GridPane) getChildren().get(0);
