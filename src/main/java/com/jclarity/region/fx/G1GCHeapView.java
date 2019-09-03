@@ -67,8 +67,10 @@ public class G1GCHeapView extends Region implements ChangeListener<Number> {
 
         Platform.runLater(() ->
             grid.getChildren().forEach(node -> {
-                G1GCRegion activeRegion = regionIterator.next();
-                ((G1Region) node).update(activeRegion.getAssignment(), (double) activeRegion.getNextLive() / (double)activeRegion.getRegionSize());
+                if (regionIterator.hasNext()) {
+                    G1GCRegion activeRegion = regionIterator.next();
+                    ((G1Region) node).update(activeRegion.getAssignment(), (double) activeRegion.getNextLive() / (double) activeRegion.getRegionSize());
+                }
         }));
     }
 }

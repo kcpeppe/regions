@@ -1,6 +1,7 @@
 package com.jclarity.region.fx;
 
 
+import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
@@ -57,7 +58,6 @@ public class VideoControls extends HBox {
         Button rewind = new Button("<<");
         rewind.setOnAction(event -> {
             pause();
-            timer.cancel();
             frameCounter.stepBackwards();
         });
 
@@ -83,8 +83,10 @@ public class VideoControls extends HBox {
                                     frameCounter.stepForward();
                                 else {
                                     this.cancel();
-                                    playPause.setText(">");
-                                    playing = false;
+                                    Platform.runLater(() -> {
+                                        playPause.setText(">");
+                                        playing = false;
+                                    });
                                 }
                             }
                         }, 0, 500);
