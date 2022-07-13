@@ -8,11 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
-import javax.swing.*;
-import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -25,10 +21,8 @@ public class VideoControls extends HBox {
     private Button stop;
     private FrameCounter frameCounter;
     final TimeSlider slider;
-    final private Stage stage;
 
-    public VideoControls(Stage stage) {
-        this.stage = stage;
+    public VideoControls() {
         getStyleClass().add("video-controls");
         slider = new TimeSlider();
         setButtons();
@@ -41,27 +35,14 @@ public class VideoControls extends HBox {
 
     private void setButtons() {
 
-//        ToggleButton openFileDialog = new ToggleButton("open");
-//
-//        openFileDialog.setOnAction(event -> {
-//            FileChooser fileChooser = new FileChooser();
-//            fileChooser.setTitle("Open Log File");
-//            File file = fileChooser.showOpenDialog(stage);
-////            openFile(file);
-//        });
-
-
-        Image image ;
-
-
-        image = new Image(getClass().getResourceAsStream("step_backwards.png"));
+        Image image = new Image(getClass().getResourceAsStream("step_backwards.png"));
         Button rewind = new Button("<<");
         rewind.setOnAction(event -> {
             pause();
             frameCounter.stepBackwards();
         });
 
-        image = new Image(getClass().getResource("step_to_beginning.png").toExternalForm());
+        image = new Image(getClass().getResourceAsStream("step_to_beginning.png"));
         Button skipToBeginning = new Button("|<");  //rewind
         skipToBeginning.setOnAction(event -> {
             pause();
@@ -96,7 +77,7 @@ public class VideoControls extends HBox {
         });
         stop = new Button("x");
         stop.setOnAction(event -> {
-           stop();
+            stop();
         });
 
         image = new Image(getClass().getResourceAsStream("step_forward.png"));
