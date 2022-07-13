@@ -1,6 +1,5 @@
 plugins {
     id 'application'
-    id 'java'
     id 'org.openjfx.javafxplugin' version '0.0.8'
 }
 
@@ -9,7 +8,7 @@ repositories {
 }
 
 javafx {
-    version = '11'
+    version = '17'
     modules = ['javafx.controls']
 }
 
