@@ -25,10 +25,10 @@ public class G1GCHeapView extends Region implements ChangeListener<Number> {
     }
 
     private GridPane initGridPane() {
-        final G1GCHeap heap = jvm.getG1GCHeapAt(0);
-        calculateGridSize(heap.size());
+        int regionCount = jvm.regionCount();
+        colNum = calculateGridSize(regionCount);
         GridPane grid = new GridPane();
-        heap.forEach(region -> {
+        for(int n=0, nMax=colNum*colNum; n < nMax; n++) {
             G1Region rec = new G1Region();
             GridPane.setRowIndex(rec,row);
             GridPane.setColumnIndex(rec,col);
@@ -36,24 +36,14 @@ public class G1GCHeapView extends Region implements ChangeListener<Number> {
             col = (col + 1) % colNum;
             if ( col == 0)
                 row++;
-        });
+        };
         return grid;
     }
 
-    private void calculateGridSize( int numberOfRectangles) {
-        int limit = (int)Math.sqrt( (double)numberOfRectangles);
-        int value = numberOfRectangles;
-        int prime = 2;
-        colNum = 1;
-        while ( value != 1 && prime < limit) {
-            if ( value % prime == 0) {
-                colNum *= prime;
-                value = value / prime;
-                if ( colNum > limit)
-                    break;;
-            } else
-                prime++;
-        }
+    private int calculateGridSize( int numberOfRectangles) {
+        int square = (int)Math.sqrt((double)numberOfRectangles);
+        while (((square*square) - numberOfRectangles) < 0) square += 1;
+        return square;
     }
 
     Random random = new Random(9);
@@ -65,12 +55,12 @@ public class G1GCHeapView extends Region implements ChangeListener<Number> {
         Iterator<G1GCRegion> regionIterator = heap.iterator();
         GridPane grid = (GridPane) getChildren().get(0);
 
-        Platform.runLater(() ->
-            grid.getChildren().forEach(node -> {
-                if (regionIterator.hasNext()) {
-                    G1GCRegion activeRegion = regionIterator.next();
-                    ((G1Region) node).update(activeRegion.getAssignment(), (double) activeRegion.getNextLive() / (double) activeRegion.getRegionSize());
+        Platform.runLater(() -> {
+            while (regionIterator.hasNext()) {
+                G1GCRegion activeRegion = regionIterator.next();
+                int gridIndex = jvm.getRegionIndex(activeRegion);
+                ((G1Region) grid.getChildren().get(gridIndex)).update(activeRegion.assignment(), (double) activeRegion.bytesUsed() / (double) activeRegion.regionSize());
                 }
-        }));
+        });
     }
 }

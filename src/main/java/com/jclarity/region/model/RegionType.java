@@ -4,12 +4,13 @@ package com.jclarity.region.model;
 import java.util.Locale;
 
 public enum RegionType {
-    FREE("FREE"),
     EDEN("EDEN"),
-    SURV("SURV"),
-    OLD("OLD"),
+    FREE("FREE"),
+    HUMC("HUMC"),
     HUMS("HUMS"),
-    HUMC("HUMC");
+    OLD("OLD"),
+    OARC("OARC"),
+    SURV("SURV");
 
     private final String label;
 
