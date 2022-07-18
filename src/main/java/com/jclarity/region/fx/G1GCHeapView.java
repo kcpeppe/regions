@@ -6,16 +6,9 @@ import com.jclarity.region.model.JavaVirtualMachine;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.geometry.Bounds;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.TilePane;
 
 import java.util.Iterator;
 import java.util.Random;
@@ -65,16 +58,15 @@ public class G1GCHeapView extends Region implements ChangeListener<Number> {
 
     @Override
     public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-        final int index = newValue.intValue();
-        final G1GCHeap heap = jvm.getG1GCHeapAt(index);
-        Iterator<G1GCRegion> regionIterator = heap.iterator();
-        GridPane grid = (GridPane) getChildren().get(0);
+        final int frame = newValue.intValue();
 
         Platform.runLater(() -> {
-            while (regionIterator.hasNext()) {
-                G1GCRegion activeRegion = regionIterator.next();
-                int gridIndex = jvm.getRegionIndex(activeRegion);
-                ((G1Region) grid.getChildren().get(gridIndex)).update(index);
+            System.err.println("runLater " + newValue);
+            final G1GCHeap heap = jvm.getG1GCHeapAt(frame);
+            Iterator<G1GCRegion> regionIterator = heap.iterator();
+            GridPane grid = (GridPane) getChildren().get(0);
+            for (int index = 0, nMax = grid.getColumnCount()*grid.getRowCount(); index <nMax; index++) {
+                ((G1Region) grid.getChildren().get(index)).update(frame);
             }
         });
     }
