@@ -1,26 +1,30 @@
 package com.jclarity.region.model;
 
 
+import javafx.css.PseudoClass;
+
 import java.util.Locale;
 
 public enum RegionType {
-    EDEN("EDEN"),
     FREE("FREE"),
+    EDEN("EDEN"),
+    SURV("SURV"),
+    OLD("OLD"),
     HUMC("HUMC"),
     HUMS("HUMS"),
-    OLD("OLD"),
-    OARC("OARC"),
-    SURV("SURV");
+    OARC("OARC");
 
     private final String label;
+    private final PseudoClass pseudoClass;
 
     RegionType(String label) {
         this.label = label;
+        this.pseudoClass = PseudoClass.getPseudoClass(this.label.toLowerCase(Locale.ROOT));
     }
 
     public String getLabel() { return label; }
 
-    public String toStyleClass() {
-        return getLabel().toLowerCase(Locale.ROOT);
+    public PseudoClass getPseudoClass() {
+        return pseudoClass;
     }
 }

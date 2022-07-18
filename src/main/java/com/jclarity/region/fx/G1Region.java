@@ -1,13 +1,12 @@
 package com.jclarity.region.fx;
 
 import com.jclarity.region.model.RegionType;
+import javafx.geometry.Insets;
 import javafx.scene.control.Tooltip;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Pair;
 
-import java.util.Arrays;
 import java.util.Stack;
 
 
@@ -32,9 +31,8 @@ public class G1Region extends Pane {
         occupancyPercentage = new double[nViews];
         for (int n=0; n<numberOfViews; n++) occupancyPercentage[n] = 1.0;
         getStylesheets().add(G1Region.class.getResource("regions.css").toExternalForm());
-        getStyleClass().setAll("g1-region", "free");
-//        setPrefSize(width, height);
-        setMinSize(width, height);
+        getStyleClass().setAll("g1-region");
+        setPrefSize(width, height);
 
         setOnMouseEntered(e -> {
             tooltip = new Tooltip(type[currentView].getLabel() +" - " + String.format("%2.1f%%", occupancyPercentage[currentView] * 100.0d));
@@ -44,6 +42,9 @@ public class G1Region extends Pane {
             Tooltip.uninstall(this, tooltip);
             tooltip = null;
         });
+
+        pseudoClassStateChanged(RegionType.FREE.getPseudoClass(), true);
+
     }
 
     Stack<Pair<RegionType, Double>> history = new Stack<>();
@@ -56,17 +57,21 @@ public class G1Region extends Pane {
         }
     }
 
-    public void update(int view)  {
+    public void update(int view) {
+        int oldView = currentView;
         currentView = view;
-        RegionType _type = type[currentView];
-        double _occupancyPercentage = occupancyPercentage[currentView];
-        int occupancy = (int)(_occupancyPercentage * 10.0);
-        // TODO: Use pseudoclass state here instead of style class, e.g. g1-region:eden
-        //       This is much faster than changing styleclass.
-        //       Styleclass should be set when region is created.
-        getStyleClass().setAll("g1-region", _type.toStyleClass());
-        // TODO: There should be some way to do this programmatically rather than setStyle.
-        setStyle("-fx-background-insets: 0.1, 0 0 0 " + occupancy + ";");
+
+        if (type[oldView].getPseudoClass() != type[currentView].getPseudoClass()) {
+            pseudoClassStateChanged(type[oldView].getPseudoClass(), false);
+            pseudoClassStateChanged(type[currentView].getPseudoClass(), true);
+        }
+
+        if (Double.compare(occupancyPercentage[oldView], occupancyPercentage[currentView]) == 0) {
+            double _occupancyPercentage = occupancyPercentage[currentView];
+            int occupancy = (int) (_occupancyPercentage * 10.0);
+
+            setStyle("-fx-background-insets: 0.1, 0 0 0 " + occupancy + ";");
+        }
     }
 
 

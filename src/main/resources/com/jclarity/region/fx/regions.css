@@ -3,23 +3,27 @@
     -fx-border-width: 0.1px;
 }
 
-.g1-region.free {
+.g1-region:free {
     -fx-background-color: black, black;
 }
-.g1-region.eden {
+.g1-region:eden {
     -fx-background-color: green;
 }
-.g1-region.surv {
+.g1-region:surv {
     -fx-background-color: yellow;
 }
-.g1-region.old {
+.g1-region:old {
     -fx-background-color: blue, lightblue;
 }
-.g1-region.hums {
+.g1-region:hums {
     -fx-background-color: coral;
 }
-.g1-region.humc {
+.g1-region:humc {
     -fx-background-color: red;
+}
+
+.g1-region:oarc {
+    -fx-background-color: brown;
 }
 
 .tooltip {
