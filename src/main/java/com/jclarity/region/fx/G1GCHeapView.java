@@ -61,7 +61,6 @@ public class G1GCHeapView extends Region implements ChangeListener<Number> {
         final int frame = newValue.intValue();
 
         Platform.runLater(() -> {
-            System.err.println("runLater " + newValue);
             final G1GCHeap heap = jvm.getG1GCHeapAt(frame);
             Iterator<G1GCRegion> regionIterator = heap.iterator();
             GridPane grid = (GridPane) getChildren().get(0);
