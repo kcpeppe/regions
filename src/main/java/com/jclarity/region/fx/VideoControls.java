@@ -4,6 +4,7 @@ package com.jclarity.region.fx;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
@@ -36,8 +37,8 @@ public class VideoControls extends HBox {
     private void setButtons() {
 
         Image image = new Image(getClass().getResourceAsStream("step_backwards.png"));
-        Button rewind = new Button("<<");
-        rewind.setOnAction(event -> {
+        Button stepBackward = new Button("<<");
+        stepBackward.setOnAction(event -> {
             pause();
             frameCounter.stepBackwards();
         });
@@ -81,8 +82,8 @@ public class VideoControls extends HBox {
         });
 
         image = new Image(getClass().getResourceAsStream("step_forward.png"));
-        Button fastForward = new Button(">>"); //
-        fastForward.setOnAction(event -> {
+        Button stepForward = new Button(">>"); //
+        stepForward.setOnAction(event -> {
             pause();
             frameCounter.stepForward();
         });
@@ -95,7 +96,9 @@ public class VideoControls extends HBox {
             frameCounter.stepToEnd();
         });
         //getChildren().addAll(openFileDialog, skipToBeginning, rewind, playPause, slider, fastForward, skipToEnd);
-        getChildren().addAll(stop,skipToBeginning, rewind, playPause, slider, fastForward, skipToEnd);
+        HBox sliderBox = new HBox(slider);
+        sliderBox.setAlignment(Pos.CENTER);
+        getChildren().addAll(skipToBeginning, stepBackward, playPause, sliderBox, stepForward, skipToEnd);
     }
 
     private void pause() {
@@ -107,11 +110,7 @@ public class VideoControls extends HBox {
     }
 
     private void stop() {
-        if ( playing) {
-            playPause.setText(">");
-            timer.cancel();
-            playing = false;
-        }
+        pause();
         setVisible(false);
     }
 }
