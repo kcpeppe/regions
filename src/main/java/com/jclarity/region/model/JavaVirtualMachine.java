@@ -5,16 +5,24 @@ import com.jclarity.region.io.RegionStream;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
 
 public class JavaVirtualMachine implements Iterable<G1GCHeap> {
 
-    ArrayList<G1GCHeap> viewsOverTime = new ArrayList<>();
+    List<G1GCHeap> viewsOverTime = List.of();
+
+    Map<Long,Integer> regionMapping = new HashMap<>();
     private Path path;
+
+    int regionCount = 0;
+
+    long regionSize = 0L;
 
     public JavaVirtualMachine(String fileName) {
         this.path = FileSystems.getDefault().getPath(fileName);
@@ -25,17 +33,23 @@ public class JavaVirtualMachine implements Iterable<G1GCHeap> {
     }
 
     public void load() throws IOException {
-        RegionStream stream = new RegionStream(path);
-        while ( ! stream.isEof()) {
-            G1GCHeap heap = new G1GCHeap();
-            stream.readBlock(heap);
-            stream.readBlock(new G1GCHeap());
-            viewsOverTime.add(heap);
-        }
+        RegionStream regionStream = new RegionStream(path);
+        viewsOverTime = regionStream.read().sorted().toList();
+        regionCount = 0;
+        viewsOverTime.stream().flatMap(G1GCHeap::stream).mapToLong(G1GCRegion::startAddress).distinct().sorted()
+                .forEach(address -> regionMapping.putIfAbsent(address, regionCount++));
+        regionSize = viewsOverTime.stream().flatMap(G1GCHeap::stream).mapToLong(G1GCRegion::regionSize).max().getAsLong();
     }
+
+    public long regionSize() { return regionSize; }
+    public int regionCount() { return regionCount; }
 
     public int getNumberOfViews() {
         return viewsOverTime.size();
+    }
+
+    public int getRegionIndex(G1GCRegion g1GCRegion) {
+        return regionMapping.get(g1GCRegion.startAddress());
     }
 
     public G1GCHeap getG1GCHeapAt(int index) {

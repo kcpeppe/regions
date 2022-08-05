@@ -1,17 +1,15 @@
 package com.jclarity.region.fx;
 
 
+import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
-import javax.swing.*;
-import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -24,10 +22,8 @@ public class VideoControls extends HBox {
     private Button stop;
     private FrameCounter frameCounter;
     final TimeSlider slider;
-    final private Stage stage;
 
-    public VideoControls(Stage stage) {
-        this.stage = stage;
+    public VideoControls() {
         getStyleClass().add("video-controls");
         slider = new TimeSlider();
         setButtons();
@@ -40,28 +36,14 @@ public class VideoControls extends HBox {
 
     private void setButtons() {
 
-//        ToggleButton openFileDialog = new ToggleButton("open");
-//
-//        openFileDialog.setOnAction(event -> {
-//            FileChooser fileChooser = new FileChooser();
-//            fileChooser.setTitle("Open Log File");
-//            File file = fileChooser.showOpenDialog(stage);
-////            openFile(file);
-//        });
-
-
-        Image image ;
-
-
-        image = new Image(getClass().getResourceAsStream("step_backwards.png"));
-        Button rewind = new Button("<<");
-        rewind.setOnAction(event -> {
+        Image image = new Image(getClass().getResourceAsStream("step_backwards.png"));
+        Button stepBackward = new Button("<<");
+        stepBackward.setOnAction(event -> {
             pause();
-            timer.cancel();
             frameCounter.stepBackwards();
         });
 
-        image = new Image(getClass().getResource("step_to_beginning.png").toExternalForm());
+        image = new Image(getClass().getResourceAsStream("step_to_beginning.png"));
         Button skipToBeginning = new Button("|<");  //rewind
         skipToBeginning.setOnAction(event -> {
             pause();
@@ -83,8 +65,10 @@ public class VideoControls extends HBox {
                                     frameCounter.stepForward();
                                 else {
                                     this.cancel();
-                                    playPause.setText(">");
-                                    playing = false;
+                                    Platform.runLater(() -> {
+                                        playPause.setText(">");
+                                        playing = false;
+                                    });
                                 }
                             }
                         }, 0, 500);
@@ -94,12 +78,12 @@ public class VideoControls extends HBox {
         });
         stop = new Button("x");
         stop.setOnAction(event -> {
-           stop();
+            stop();
         });
 
         image = new Image(getClass().getResourceAsStream("step_forward.png"));
-        Button fastForward = new Button(">>"); //
-        fastForward.setOnAction(event -> {
+        Button stepForward = new Button(">>"); //
+        stepForward.setOnAction(event -> {
             pause();
             frameCounter.stepForward();
         });
@@ -112,7 +96,9 @@ public class VideoControls extends HBox {
             frameCounter.stepToEnd();
         });
         //getChildren().addAll(openFileDialog, skipToBeginning, rewind, playPause, slider, fastForward, skipToEnd);
-        getChildren().addAll(stop,skipToBeginning, rewind, playPause, slider, fastForward, skipToEnd);
+        HBox sliderBox = new HBox(slider);
+        sliderBox.setAlignment(Pos.CENTER);
+        getChildren().addAll(skipToBeginning, stepBackward, playPause, sliderBox, stepForward, skipToEnd);
     }
 
     private void pause() {
@@ -124,11 +110,7 @@ public class VideoControls extends HBox {
     }
 
     private void stop() {
-        if ( playing) {
-            playPause.setText(">");
-            timer.cancel();
-            playing = false;
-        }
+        pause();
         setVisible(false);
     }
 }

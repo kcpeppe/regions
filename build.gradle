@@ -1,10 +1,28 @@
-apply plugin:"application"
+plugins {
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+}
 
-mainClassName="com.jclarity.region.G1GCHeapAnimation"
+repositories {
+    mavenCentral()
+}
+
+javafx {
+    version = '17'
+    modules = ['javafx.controls']
+}
+
+
+compileJava {
+//    options.compilerArgs << '-Xlint:deprecation'
+}
+
+application {
+    mainClassName = 'com.jclarity.region.G1GCHeapAnimation'
+}
 
 run {
-
-args 'testdata.log'
+    args 'testdata.log'
 }
 
 
